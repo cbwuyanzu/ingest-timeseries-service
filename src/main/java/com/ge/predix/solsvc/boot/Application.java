@@ -16,6 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.MutablePropertySources;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.context.support.StandardServletEnvironment;
 
 /**
@@ -64,12 +65,14 @@ import org.springframework.web.context.support.StandardServletEnvironment;
 // Add any configuration loading call you want to exclude
 
 })
+@EnableScheduling
 @PropertySource("classpath:application-default.properties")
 @ComponentScan(basePackages = ("com.ge.predix.solsvc"))
 @ImportResource(
 {
         "classpath*:META-INF/spring/predix-microservice-cf-jsr-cxf-context.xml",
         "classpath*:META-INF/spring/predix-microservice-cf-jsr-scan-context.xml",
+//        "classpath*:META-INF/spring/wind-service-acs-content.xml",
         "classpath*:META-INF/spring/predix-rest-client-scan-context.xml",
 })
 public class Application
