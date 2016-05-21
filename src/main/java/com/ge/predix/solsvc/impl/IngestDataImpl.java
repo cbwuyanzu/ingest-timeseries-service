@@ -88,11 +88,13 @@ public class IngestDataImpl implements IngestDataAPI {
 	public void init() {
 		this.serviceManagerService.createRestWebService(this, null);
 		createMetrics();
+		createGEMetrics();
 	}
 
 	@Scheduled(cron = "0 0 * * * ?")
 	public void dataIngest() {
 		createMetrics();
+		createGEMetrics();
 	}
 
 	@Override
@@ -196,6 +198,63 @@ public class IngestDataImpl implements IngestDataAPI {
 		}
 	}
 
+	@SuppressWarnings({ "nls", "unchecked" })
+	private void createGEMetrics() {
+		String newInfoIn = "";
+		String newInfoOut = "";
+		for (int connectcount = 0; connectcount < 5; connectcount++) {
+			newInfoOut = getJsonContent("http://www.mypm25.cn/countOne.action?di.devid=61728");
+			newInfoIn = getJsonContent("http://www.mypm25.cn/countOne.action?di.devid=61726");
+			if (!newInfoOut.equals("")) {
+				Pm25Sensor pm25 = getGEInPm25(newInfoOut);
+				DatapointsIngestion dpIngestion = new DatapointsIngestion();
+				dpIngestion.setMessageId(String.valueOf(System.currentTimeMillis()));
+				Body body = new Body();
+				body.setName(pm25.getPointID()); // $NON-NLS-1$
+				List<Object> datapoint1 = new ArrayList<Object>();
+				datapoint1.add(System.currentTimeMillis());
+				datapoint1.add(pm25.getMeasure());
+				datapoint1.add(3); // quality
+				List<Object> datapoints = new ArrayList<Object>();
+				datapoints.add(datapoint1);
+				body.setDatapoints(datapoints);
+				com.ge.dsp.pm.ext.entity.util.map.Map map = new com.ge.dsp.pm.ext.entity.util.map.Map();
+				map.put("site", pm25.getCity() + pm25.getPointName()); // $NON-NLS-2$
+				map.put("lat", pm25.getyValue()+"");
+				map.put("lng", pm25.getxValue()+"");
+				body.setAttributes(map);
+				List<Body> bodies = new ArrayList<Body>();
+				bodies.add(body);
+				dpIngestion.setBody(bodies);
+				this.timeseriesFactory.create(dpIngestion);
+			}
+			if (!newInfoIn.equals("")) {
+				Pm25Sensor pm25 = getGEInPm25(newInfoIn);
+				DatapointsIngestion dpIngestion = new DatapointsIngestion();
+				dpIngestion.setMessageId(String.valueOf(System.currentTimeMillis()));
+				Body body = new Body();
+				body.setName(pm25.getPointID()); // $NON-NLS-1$
+				List<Object> datapoint1 = new ArrayList<Object>();
+				datapoint1.add(System.currentTimeMillis());
+				datapoint1.add(pm25.getMeasure());
+				datapoint1.add(3); // quality
+				List<Object> datapoints = new ArrayList<Object>();
+				datapoints.add(datapoint1);
+				body.setDatapoints(datapoints);
+				com.ge.dsp.pm.ext.entity.util.map.Map map = new com.ge.dsp.pm.ext.entity.util.map.Map();
+				map.put("site", pm25.getCity() + pm25.getPointName()); // $NON-NLS-2$
+				map.put("lat", pm25.getyValue());
+				map.put("lng", pm25.getxValue());
+				body.setAttributes(map);
+				List<Body> bodies = new ArrayList<Body>();
+				bodies.add(body);
+				dpIngestion.setBody(bodies);
+				this.timeseriesFactory.create(dpIngestion);
+			}
+			break;
+		}
+	}
+
 	@SuppressWarnings("javadoc")
 	protected Response handleResult(Object entity) {
 		ResponseBuilder responseBuilder = Response.status(Status.OK);
@@ -275,6 +334,46 @@ public class IngestDataImpl implements IngestDataAPI {
 		return pm25;
 	}
 
+	public Pm25Sensor getGEInPm25(String jsonStr) {
+		Pm25Sensor pm25 = new Pm25Sensor();
+		try {// 将json字符串转换为json对象
+			JSONObject jsonobj = new JSONObject(jsonStr);
+			JSONArray jsonArr = jsonobj.getJSONArray("jsonlist");
+			JSONObject obj = (JSONObject) jsonArr.get(0);
+			pm25.setCity("上海");
+			pm25.setMeasure(obj.getInt("pmvalue"));
+			pm25.setPointID(jsonobj.getJSONObject("di").getString("devid"));
+			pm25.setPointName("通用电气（室内）");
+			pm25.setUpdateTime(obj.getString("time"));
+			pm25.setxValue("121.590100");
+			pm25.setyValue("31.197586");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pm25;
+	}
+
+	public Pm25Sensor getGEOutPm25(String jsonStr) {
+		Pm25Sensor pm25 = new Pm25Sensor();
+		try {// 将json字符串转换为json对象
+			JSONObject jsonobj = new JSONObject(jsonStr);
+			JSONArray jsonArr = jsonobj.getJSONArray("jsonlist");
+			JSONObject obj = (JSONObject) jsonArr.get(0);
+			pm25.setCity("上海");
+			pm25.setMeasure(obj.getInt("pmvalue"));
+			pm25.setPointID(jsonobj.getJSONObject("di").getString("devid"));
+			pm25.setPointName("通用电气（室外）");
+			pm25.setUpdateTime(obj.getString("time"));
+			pm25.setxValue("121.589362");
+			pm25.setyValue("31.198181");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pm25;
+	}
+
 	@Override
 	public Response postDataPoints(String measure, String tag) {
 		{
@@ -290,9 +389,7 @@ public class IngestDataImpl implements IngestDataAPI {
 
 			List<Object> datapoints = new ArrayList<Object>();
 			datapoints.add(datapoint1);
-
 			body.setDatapoints(datapoints);
-
 			com.ge.dsp.pm.ext.entity.util.map.Map map = new com.ge.dsp.pm.ext.entity.util.map.Map();
 			map.put("site", "heihei"); // $NON-NLS-2$
 			// map.put("lat", pm25.getyValue());
