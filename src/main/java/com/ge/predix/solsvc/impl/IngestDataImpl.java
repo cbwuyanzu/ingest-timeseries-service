@@ -206,7 +206,7 @@ public class IngestDataImpl implements IngestDataAPI {
 			newInfoOut = getJsonContent("http://www.mypm25.cn/countOne.action?di.devid=61728");
 			newInfoIn = getJsonContent("http://www.mypm25.cn/countOne.action?di.devid=61726");
 			if (!newInfoOut.equals("")) {
-				Pm25Sensor pm25 = getGEInPm25(newInfoOut);
+				Pm25Sensor pm25 = getGEOutPm25(newInfoOut);
 				DatapointsIngestion dpIngestion = new DatapointsIngestion();
 				dpIngestion.setMessageId(String.valueOf(System.currentTimeMillis()));
 				Body body = new Body();
