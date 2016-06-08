@@ -48,7 +48,7 @@ import com.ge.predix.timeseries.entity.datapoints.queryrequest.latest.Datapoints
 import com.ge.predix.timeseries.entity.datapoints.queryresponse.DatapointsResponse;
 
 /**
- * 
+ *
  * @author predix -
  */
 @Component
@@ -103,7 +103,7 @@ public class IngestDataImpl implements IngestDataAPI {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param s
 	 *            -
 	 * @return
@@ -138,7 +138,7 @@ public class IngestDataImpl implements IngestDataAPI {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param id
 	 * @param startDuration
 	 * @param tagorder
@@ -265,12 +265,12 @@ public class IngestDataImpl implements IngestDataAPI {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.ge.predix.solsvc.api.WindDataAPI#getWindDataTags()
 	 */
 
 	/**
-	 * 
+	 *
 	 * @param entity
 	 * @return
 	 * @throws IOException
