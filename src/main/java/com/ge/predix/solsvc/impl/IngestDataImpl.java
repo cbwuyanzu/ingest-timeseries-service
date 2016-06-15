@@ -167,6 +167,7 @@ public class IngestDataImpl implements IngestDataAPI {
 	@SuppressWarnings({ "nls", "unchecked" })
 	private void createMetrics() {
 		String newInfo = "";
+		long currentTimestamp = System.currentTimeMillis();
 		for (int connectcount = 0; connectcount < 5; connectcount++) {
 			newInfo = getJsonContent("http://www.mypm25.cn/controlPoint?cityName=上海");
 			if (!newInfo.equals("")) {
@@ -177,7 +178,7 @@ public class IngestDataImpl implements IngestDataAPI {
 					Body body = new Body();
 					body.setName(pm25.getPointID()); // $NON-NLS-1$
 					List<Object> datapoint1 = new ArrayList<Object>();
-					datapoint1.add(System.currentTimeMillis());
+					datapoint1.add(currentTimestamp);
 					datapoint1.add(pm25.getMeasure());
 					datapoint1.add(3); // quality
 					List<Object> datapoints = new ArrayList<Object>();
@@ -202,6 +203,7 @@ public class IngestDataImpl implements IngestDataAPI {
 	private void createGEMetrics() {
 		String newInfoIn = "";
 		String newInfoOut = "";
+		long currentTimestamp = System.currentTimeMillis();
 		for (int connectcount = 0; connectcount < 5; connectcount++) {
 			newInfoOut = getJsonContent("http://www.mypm25.cn/countOne.action?di.devid=61728");
 			newInfoIn = getJsonContent("http://www.mypm25.cn/countOne.action?di.devid=61726");
@@ -212,7 +214,8 @@ public class IngestDataImpl implements IngestDataAPI {
 				Body body = new Body();
 				body.setName(pm25.getPointID()); // $NON-NLS-1$
 				List<Object> datapoint1 = new ArrayList<Object>();
-				datapoint1.add(System.currentTimeMillis());
+
+				datapoint1.add(currentTimestamp);
 				datapoint1.add(pm25.getMeasure());
 				datapoint1.add(3); // quality
 				List<Object> datapoints = new ArrayList<Object>();
@@ -235,7 +238,7 @@ public class IngestDataImpl implements IngestDataAPI {
 				Body body = new Body();
 				body.setName(pm25.getPointID()); // $NON-NLS-1$
 				List<Object> datapoint1 = new ArrayList<Object>();
-				datapoint1.add(System.currentTimeMillis());
+				datapoint1.add(currentTimestamp);
 				datapoint1.add(pm25.getMeasure());
 				datapoint1.add(3); // quality
 				List<Object> datapoints = new ArrayList<Object>();
