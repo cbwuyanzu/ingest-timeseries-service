@@ -185,7 +185,7 @@ public class IngestDataImpl implements IngestDataAPI {
 					datapoints.add(datapoint1);
 					body.setDatapoints(datapoints);
 					com.ge.dsp.pm.ext.entity.util.map.Map map = new com.ge.dsp.pm.ext.entity.util.map.Map();
-					map.put("site", pm25.getCity() + pm25.getPointName()); // $NON-NLS-2$
+					// map.put("site", pm25.getCity() + pm25.getPointName()); // $NON-NLS-2$
 					map.put("lat", pm25.getyValue());
 					map.put("lng", pm25.getxValue());
 					body.setAttributes(map);
@@ -222,7 +222,7 @@ public class IngestDataImpl implements IngestDataAPI {
 				datapoints.add(datapoint1);
 				body.setDatapoints(datapoints);
 				com.ge.dsp.pm.ext.entity.util.map.Map map = new com.ge.dsp.pm.ext.entity.util.map.Map();
-				map.put("site", pm25.getCity() + pm25.getPointName()); // $NON-NLS-2$
+				// map.put("site", /*pm25.getCity() + pm25.getPointName()*/"GE outdoor"); // $NON-NLS-2$
 				map.put("lat", pm25.getyValue()+"");
 				map.put("lng", pm25.getxValue()+"");
 				body.setAttributes(map);
@@ -245,7 +245,7 @@ public class IngestDataImpl implements IngestDataAPI {
 				datapoints.add(datapoint1);
 				body.setDatapoints(datapoints);
 				com.ge.dsp.pm.ext.entity.util.map.Map map = new com.ge.dsp.pm.ext.entity.util.map.Map();
-				map.put("site", pm25.getCity() + pm25.getPointName()); // $NON-NLS-2$
+				// map.put("site", /*pm25.getCity() + pm25.getPointName()*/"GE indoor"); // $NON-NLS-2$
 				map.put("lat", pm25.getyValue());
 				map.put("lng", pm25.getxValue());
 				body.setAttributes(map);

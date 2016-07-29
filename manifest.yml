@@ -1,6 +1,7 @@
+
 #inherit: base-manifest.yml
 applications:
-  - name: cdz-ingest-timeseries-service
+  - name: cdz-ingest
     buildpack: java_buildpack
     path: target/ingest-timeseries-service-1.1.9.jar
     memory: 1024M
